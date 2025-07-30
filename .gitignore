@@ -85,3 +85,8 @@ Packaged/
 
 # Optional: Ignore autosaved maps
 Autosaves/
+
+# Ignore temp/generated folders in all plugins
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+Plugins/*/Saved/
