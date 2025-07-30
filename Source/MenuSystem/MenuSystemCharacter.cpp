@@ -69,7 +69,7 @@ AMenuSystemCharacter::AMenuSystemCharacter():
 				-1,
 				15.f,
 				FColor::Blue,
-				FString::Printf(TEXT("Found subsystem %s"), *OnlineSubsystem->GetSubsystemName().ToString())
+				FString::Printf(TEXT("Found subsystem 111 %s"), *OnlineSubsystem->GetSubsystemName().ToString())
 			);
 		}
 
@@ -144,18 +144,18 @@ void AMenuSystemCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnlineSessionInterface->AddOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegate);
-	OnlineSessionInterface->AddOnFindSessionsCompleteDelegate_Handle(FindSessionsCompleteDelegate);
-	OnlineSessionInterface->AddOnJoinSessionCompleteDelegate_Handle(JoinSessionCompleteDelegate);
+	//OnlineSessionInterface->AddOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegate);
+	//OnlineSessionInterface->AddOnFindSessionsCompleteDelegate_Handle(FindSessionsCompleteDelegate);
+	//OnlineSessionInterface->AddOnJoinSessionCompleteDelegate_Handle(JoinSessionCompleteDelegate);
 
-	if (GEngine) {
-		GEngine->AddOnScreenDebugMessage(
-			-1,
-			15.f,
-			FColor::Blue,
-			FString::Printf(TEXT("AddDelegate"))
-		);
-	}
+	//if (GEngine) {
+	//	GEngine->AddOnScreenDebugMessage(
+	//		-1,
+	//		15.f,
+	//		FColor::Blue,
+	//		FString::Printf(TEXT("AddDelegate"))
+	//	);
+	//}
 }
 
 void AMenuSystemCharacter::JoinGameSession()
