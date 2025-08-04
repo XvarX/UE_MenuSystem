@@ -21,6 +21,13 @@ protected:
 	virtual bool Initialize() override;
 	virtual void NativeDestruct() override;
 
+	//
+	// Callbacks for the custom delegates on the MultiplayerSessionSubsystem
+	//
+	UFUNCTION()
+	void OnCreateSession(bool bWasSuccessful);
+
+
 private:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta = (AllowPrivateAccess = true))

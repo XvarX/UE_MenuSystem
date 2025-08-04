@@ -24,6 +24,15 @@ void UMultiplayerSessionsSubsystem::CreateSession(int32 NumPublicConnections, FS
 	}
 	auto ExistingSession = SessionInterface->GetNamedSession(NAME_GameSession);
 	if (ExistingSession != nullptr) {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(
+				-1,
+				15.f,
+				FColor::Yellow,
+				FString(TEXT("Try Destory"))
+			);
+		}
+
 		SessionInterface->DestroySession(NAME_GameSession);
 	}
 
@@ -36,12 +45,36 @@ void UMultiplayerSessionsSubsystem::CreateSession(int32 NumPublicConnections, FS
 	LastSessionSettings->bAllowJoinInProgress = true;
 	LastSessionSettings->bAllowJoinViaPresence = true;
 	LastSessionSettings->bShouldAdvertise = true;
+	LastSessionSettings->bUseLobbiesIfAvailable = true;
 	LastSessionSettings->bUsesPresence = true;
 	LastSessionSettings->Set(FName("MatchType"), MatchType, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 	const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
 	if (!SessionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, *LastSessionSettings)) {
 		SessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegateHandle);
+
+		//Broadcast our own custom delegate
+
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(
+				-1,
+				15.f,
+				FColor::Yellow,
+				FString(TEXT("Try Create Session Fail here %s"))
+			);
+		}
+
+		MultiplayerOnCreateSessionComplete.Broadcast(false);
+	}
+	else {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(
+				-1,
+				15.f,
+				FColor::Yellow,
+				FString(TEXT("Try Create Session"))
+			);
+		}
 	}
 
 
@@ -64,6 +97,34 @@ void UMultiplayerSessionsSubsystem::StartSession() {
 }
 
 void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful) {
+	if (SessionInterface) {
+		SessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegateHandle);
+	}
+
+	if (bWasSuccessful) {
+
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(
+				-1,
+				15.f,
+				FColor::Yellow,
+				FString(TEXT("OnCreateSessionComplete Success"))
+			);
+		}
+	}
+	else {
+
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(
+				-1,
+				15.f,
+				FColor::Yellow,
+				FString(TEXT("OnCreateSessionComplete Fail"))
+			);
+		}
+	}
+
+	MultiplayerOnCreateSessionComplete.Broadcast(bWasSuccessful);
 
 }
 
@@ -82,3 +143,4 @@ void UMultiplayerSessionsSubsystem::OnDestroySessionComplete(FName SessionName, 
 void UMultiplayerSessionsSubsystem::OnStartSessionComplete(FName SessionName, bool bWasSuccessful) {
 
 }
+
